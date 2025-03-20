@@ -16,7 +16,12 @@ export default Event;
 export const eventLoader = async () => {
    const response = await fetch("http://localhost:8080/events");
    if (!response.ok) {
-      return { message: "Failed to fetch events." };
+      throw new Response(
+         JSON.stringify({ message: "Failed to fetch events." }),
+         {
+            status: 500,
+         }
+      );
    } else {
       const data = await response.json();
       return data.events;
