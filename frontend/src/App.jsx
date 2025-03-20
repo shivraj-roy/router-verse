@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "./pages/RootLayout";
 import Home from "./pages/Home";
-import Event from "./pages/Event";
+import Event, { eventLoader } from "./pages/Event";
 import EventDetail from "./pages/EventDetail";
 import NewEvent from "./pages/NewEvent";
 import EditEvent from "./pages/EditEvent";
@@ -22,24 +22,7 @@ const router = createBrowserRouter([
                {
                   index: true,
                   element: <Event />,
-                  loader: async () => {
-                     const response = await fetch(
-                        "http://localhost:8080/events"
-                     );
-                     if (!response.ok) {
-                        throw new Response(
-                           JSON.stringify({
-                              message: "Failed to fetch events.",
-                           }),
-                           {
-                              status: 500,
-                           }
-                        );
-                     } else {
-                        const data = await response.json();
-                        return data.events;
-                     }
-                  },
+                  loader: eventLoader,
                },
                {
                   path: ":id",
