@@ -1,18 +1,32 @@
-import React from "react";
+import EventForm from "../components/EventForm";
+import { redirect } from "react-router-dom";
 
 const NewEvent = () => {
-   return (
-      <div className="new-event-container">
-         <h1>Create New Event</h1>
-         <form className="event-form">
-            {/* Event creation form will be rendered here */}
-            <div className="form-group">
-               <label htmlFor="eventName">Event Name</label>
-               <input type="text" id="eventName" name="eventName" />
-            </div>
-         </form>
-      </div>
-   );
+   return <EventForm />;
 };
 
 export default NewEvent;
+
+export const newEventAction = async ({ request }) => {
+   const data = await request.formData();
+   const eventData = {
+      title: data.get("title"),
+      image: data.get("image"),
+      date: data.get("date"),
+      description: data.get("description"),
+   };
+
+   const response = await fetch("http://localhost:8080/events", {
+      method: "POST",
+      headers: {
+         "Content-Type": "application/json",
+      },
+      body: JSON.stringify(eventData),
+   });
+
+   if (!response.ok) {
+      throw new Error("Could not save event.");
+   }
+
+   return redirect("/events");
+};
