@@ -3,7 +3,8 @@ import EventForm from "../components/EventForm";
 
 const EditEvent = () => {
    const data = useRouteLoaderData("event-detail");
-   return <EventForm event={data} />;
+   console.log("Event data in EditEvent:", data); // Debug log
+   return <EventForm event={data} method="PATCH" />;
 };
 
 export default EditEvent;

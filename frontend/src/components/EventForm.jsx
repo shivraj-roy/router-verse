@@ -1,15 +1,15 @@
-import { useNavigate, Form } from "react-router-dom";
+import { useNavigate, Form, redirect } from "react-router-dom";
 
 import classes from "./EventForm.module.css";
 
-function EventForm({ event }) {
+function EventForm({ event, method }) {
    const navigate = useNavigate();
    function cancelHandler() {
       navigate("..");
    }
 
    return (
-      <Form method="post" className={classes.form}>
+      <Form method={method.toUpperCase()} className={classes.form}>
          <p>
             <label htmlFor="title">Title</label>
             <input
@@ -61,3 +61,34 @@ function EventForm({ event }) {
 }
 
 export default EventForm;
+
+export const EventFormAction = async ({ request, params }) => {
+   const method = request.method;
+   const data = await request.formData();
+   const eventData = {
+      title: data.get("title"),
+      image: data.get("image"),
+      date: data.get("date"),
+      description: data.get("description"),
+   };
+
+   let url = "http://localhost:8080/events";
+   if (method === "PATCH") {
+      const eventId = params.id;
+      url = `${url}/${eventId}`;
+   }
+
+   const response = await fetch(url, {
+      method: method,
+      headers: {
+         "Content-Type": "application/json",
+      },
+      body: JSON.stringify(eventData),
+   });
+
+   if (!response.ok) {
+      throw new Error("Could not save event.");
+   }
+
+   return redirect("/events");
+};
