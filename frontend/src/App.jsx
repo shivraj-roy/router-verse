@@ -8,6 +8,7 @@ import EditEvent from "./pages/EditEvent";
 import EventsRootLayout from "./pages/EventsRootLayout";
 import ErrorPage from "./pages/ErrorPage";
 import { newEventAction } from "./pages/NewEvent";
+import { eventDetailAction } from "./pages/EventDetail";
 
 const router = createBrowserRouter([
    {
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
                      {
                         index: true,
                         element: <EventDetail />,
+                        action: eventDetailAction,
                      },
                      {
                         path: "edit",
